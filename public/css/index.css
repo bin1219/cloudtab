@@ -1,0 +1,24 @@
+.abutton {
+    width: 20%;
+    display: inline-block;
+}
+
+.uploadbutton {
+    height: 15%;
+    width: 40%;
+    display: inline-block;
+}
+
+.tmptab {
+    height: 80%;
+    width: 49%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.maintab {
+    height: 80%;
+    width: 49%;
+    display: inline-block;
+}
+

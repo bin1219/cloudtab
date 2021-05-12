@@ -1,0 +1,20 @@
+-let deep = 0
+mixin renderAllTab(data)
+    each item in data
+        if (item.type === 'site')
+            div(class='site')
+            -for (let i = deep; i > 0; i--) {touming
+                //- b ⚪
+                span ······
+            -}
+                a(href=item.href target="_blank") #{item.name}
+        else
+            div(class='folder')
+            -for (let i = deep; i > 0; i--) {
+                //- b ⚪
+                span ······
+            -}
+                b #{item.name}
+            -deep = deep + 1
+            +renderAllTab(item.children)
+    -deep = deep - 1

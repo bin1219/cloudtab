@@ -1,0 +1,72 @@
+doctype html
+html
+    head
+        title cloudtab
+        link(rel = 'stylesheet', href = '/css/index.css')
+
+    body
+        div(class='allbutton')
+            span(class='uploadbutton')
+                input(type='file' id='htmlFile')
+                button(onclick='uploadBookmark()') 上传书签
+            span(class='abutton')
+                button(onclick='downloadBookmark()') 下载书签
+            span(class='abutton')
+                button(onclick='addtab()') 添加书签
+            span(class='abutton')
+                button(onclick='alltab()') 所有书签
+        div(class='alltab')
+            div(class='tmptab') tmpTab<br>
+                each item, i in tmpTab
+                    div(id=i)
+                        a(href=item.url target="_blank") #{item.name}
+                        button(onclick='deleteOne('+i+')') 删除
+            div(class='maintab') maintab<br>
+                include mixins/render
+                +renderAllTab(allTab)
+        script.
+            const addtab = () => {
+                let link = `${window.location.protocol}//${window.location.host}/bookmark/addtab?uid=#{uid}`
+                let js = `javascript:window.location.href='${link}&url='+location.href+'&name='+document.title`
+                alert(js)
+            }
+            const alltab = () => {
+                let link = `${window.location.protocol}//${window.location.host}/bookmark/getall?uid=#{uid}`
+                alert(link)
+            }
+            const uploadBookmark = () => {
+                let files = document.getElementById('htmlFile').files[0]
+                let data = new FormData()
+                data.append('html', files)
+                let xhr = new XMLHttpRequest()
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        window.location.reload()
+                    }
+                };
+                xhr.open('POST', '/bookmark/upload')
+                xhr.send(data)
+            }
+            const downloadBookmark = () => {
+                let url = '/bookmark/download'
+                fetch(url).then(res => res.blob().then(blob => {
+                    var a = document.createElement('a')
+                    var url = window.URL.createObjectURL(blob)
+                    var filename = 'bookmark.html'
+                    a.href = url
+                    a.download = filename
+                    a.click()
+                    window.URL.revokeObjectURL(url)
+                }))
+            }
+            const deleteOne = (urlId) => {
+                let ajax = new XMLHttpRequest()
+                ajax.onreadystatechange = function () {
+                    if (ajax.readyState == 4 && ajax.status == 200) {
+                        let one = document.getElementById(urlId)
+                        one.setAttribute("style", "border:1px solid red")
+                    }
+                }
+                ajax.open("GET", "/bookmark/deleteone?id=" + urlId, true)
+                ajax.send()
+            }
