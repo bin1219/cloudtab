@@ -13,7 +13,7 @@ const newname = async (ctx, next) => {
     let data = { uid, email, pwd }
     accountModel.accountNewUser(data)
     ctx.body = {
-        
+        uid
     }
 }
 
